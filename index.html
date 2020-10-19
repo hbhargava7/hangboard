@@ -42,6 +42,14 @@
                 display:inline-block;
                 float:left;
             }
+            #action h1 {
+                text-align: center;
+            }
+            #bars {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
         </style>
 
     </head>
@@ -53,18 +61,14 @@
                         <h3 class="masthead-brand">hangboard</h3> <span class="beta">beta</span>
                         <nav class="nav nav-masthead justify-content-center">
                             <a class="nav-link active" href="/">Home</a>
-
                         </nav>
                     </div>
                 </header>
 
                 <main role="main" class="inner cover">
-
                     <div id='intro'>
                         <h1 class="cover-heading">let's hangboard.</h1>
                         <p class="lead">Select a routine and click 'Start!' to begin.</p>
-
-
                         <div class="btn-group">
                             <select class="selectpicker" id='select-routine'>
                                 <option>Basic Training</option>
@@ -74,16 +78,20 @@
                                 Start!
                             </button>
                         </div>
+                        <br>
+
                     </div>
-                    <br>
                     <div id='action'>
                         <h1 class="cover-heading">Basic Training</h1>
+                        <br>
                         <h1 id="phase">ABC</h1> <br>
                         <h1 id="action_indicator">ABC</h1> <br>
                         <h1 id="countdown">123</h1>
+                        <div id="" class='row justify-content-center'>
                         <div id="secondshand"></div>
                         <div id="localprogress"></div>
                         <div id="globalprogress"></div>
+                            </div>
 
                     </div>
 
@@ -96,9 +104,6 @@
                     </div>
                 </footer>
             </div>
-
-
-
         </div>
 
 
@@ -109,11 +114,12 @@
         <script src="js/progressbar.js"></script>
 
         <script type='text/javascript'>
-            //            $(document).ready(function() {
-
             $('#start-button').on('click', function(event) {
-                runRoutine('asdf')
+                $('#intro').hide();
+                $('#action').show();
+                runRoutine('asdf');
             });
+            $('#action').hide();
 
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
@@ -183,7 +189,12 @@
                 color: 'black',
                 trailColor: '#eee',
                 trailWidth: 1,
-                svgStyle: null
+                svgStyle: null,
+                from: {color: '#000000', a:0},
+                to: {color: '#ED6A5A', a:1},
+                step: function(state, circle) {
+                    circle.path.setAttribute('stroke', state.color);
+                }
             });
 
             var globalbar = new ProgressBar.Circle(globalprogress, {
@@ -227,58 +238,33 @@
                         var global_completion = seconds_elapsed/global_length;
                         globalbar.set(global_completion);
 
-                        phase_indicator.text(current_phase);
-                        action_indicator.text(current_action);
+                        phase_indicator.text('Phase: ' + current_phase);
+                        action_indicator.text('Action: ' + current_action);
                         count_indicator.text(''+current_count.toFixed(0)+' seconds')
-
 
                         let seconds = seconds_elapsed.toFixed(2);
                         let decimal = (seconds_elapsed%1).toFixed(2);
                         let threshold = (1-(interval/1000)).toFixed(2);
-                        
-                        // progression
-                        // t=0: set to 1
-                        // 0-1: decrease to 0
-                        // 1-2: reverse to -1
-                        // 2-3: set to 1; decrease to 0
-                        // 3-4: reverse to -1
-                        
-                        
-                        // then set to negative 1 and reverse to 0
 
                         if (seconds % 2 == 0 || seconds == 0) { 
                             secondsbar.set(1)
                         } 
-//                        else if (seconds % 2 == 1) {
-//                            secondsbar.set(-1)
-//                        }
-
                         if (decimal % 1 == 0 & seconds % 2 == 0) {
                             secondsbar.animate(0);
                         } else if (decimal % 1 == 0 & seconds % 2 == 1) {
                             secondsbar.animate(-1)
                         }
-                        
-                        
-                        
+
                         current_count = current_count - (interval/1000)
                         seconds_elapsed += (interval/1000)
                         if (current_count <= 0) {
                             clearInterval(countdown);
                         } 
-
                     }, interval);
-
                     await sleep(cc*1000);
                     clearInterval(countdown);
-
                 }
-
             }
-
-
-            //            });
-
         </script>
     </body>
 </html>
