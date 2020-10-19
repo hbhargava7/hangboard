@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>hangboard</title>
+        <!-- Viewport Configuration -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+        <!-- Bootstrap Core CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+        <!-- Meta Information -->
+        <meta charset='UTF-8'>
+        <meta name='keywords' content='hangboard, climbing, timer, interval training'>
+        <meta name='description' content='A simple webapp for timing hangboarding sessions.'>
+        <meta name='language' content='EN'>
+        <meta name='robots' content='index,follow'>
+        <meta name='revised' content='Sunday, October 18, 2020'>
+        <meta name='author' content='Hersh Bhargava, hello@hershbhargava.com'>
+
+
+        <link rel="stylesheet" href="css/cover.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+
+        <style type="text/css">
+            html,
+            body {
+                background: rgba(0, 0, 0, 0.7); 
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+            }
+            .beta {
+                color: lightslategray;
+            }
+            #globalprogress, #localprogress {
+                margin: 20px;
+                width: 200px;
+                height: 200px;
+                position: relative;
+                display:inline-block;
+                float:left;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+                <header class="masthead mb-auto">
+                    <div class="inner">
+                        <h3 class="masthead-brand">hangboard</h3> <span class="beta">beta</span>
+                        <nav class="nav nav-masthead justify-content-center">
+                            <a class="nav-link active" href="/">Home</a>
+
+                        </nav>
+                    </div>
+                </header>
+
+                <main role="main" class="inner cover">
+
+                    <div id='intro'>
+                        <h1 class="cover-heading">let's hangboard.</h1>
+                        <p class="lead">Select a routine and click 'Start!' to begin.</p>
+
+
+                        <div class="btn-group">
+                            <select class="selectpicker" id='select-routine'>
+                                <option>Basic Training</option>
+                                <option>Advanced Routine</option>
+                            </select>
+                            <button class="btn btn-primary" id='start-button' type="button">
+                                Start!
+                            </button>
+                        </div>
+                    </div>
+                    <br>
+                    <div id='action'>
+                        <h1 class="cover-heading">Basic Training</h1>
+                        <h1 id="phase">ABC</h1> <br>
+                        <h1 id="action_indicator">ABC</h1> <br>
+                        <h1 id="countdown">123</h1>
+                        <div id="localprogress"></div>
+                        <div id="globalprogress"></div>
+
+                    </div>
+
+                </main>
+
+                <footer class="mastfoot mt-auto">
+                    <div class="inner">
+                        <p>Created by <a href="https://hershbhargava.com" target="_blank">Hersh K. Bhargava</a>. Copyright 2020.
+                        </p>
+                    </div>
+                </footer>
+            </div>
+
+
+
+        </div>
+
+
+        <!-- Bootstrap Core JS -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+        <script src="js/progressbar.js"></script>
+
+        <script type='text/javascript'>
+//            $(document).ready(function() {
+
+                $('#start-button').on('click', function(event) {
+                    runRoutine('asdf')
+                });
+
+                function sleep(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+
+                var routine = {
+                    'name' : 'Basic Training',
+                    'data' : [['get ready', 'get ready', 10, 'blue'],
+                              ['warm up', 'jug hang', 20, 'orange'],
+                              ['warm up', 'rest', 10, 'blue'],
+                              ['warm up', 'jug hang', 20, 'orange'],
+                              ['warm up', 'rest', 60, 'blue'],
+                              ['set 1', 'dead hang', 15, 'red'],
+                              ['set 1', 'rest', 50, 'blue'],
+                              ['set 1', 'dead hang', 15, 'red'],
+                              ['set 1', 'rest', 50, 'blue'],
+                              ['set 1', 'dead hang', 15, 'red'],
+                              ['set 1', 'rest', 50, 'blue'],
+                              ['set 1', 'dead hang', 15, 'red'],
+                              ['set 1', 'rest', 300, 'blue'],
+                              ['set 2', 'dead hang', 15, 'red'],
+                              ['set 2', 'rest', 50, 'blue'],
+                              ['set 2', 'dead hang', 15, 'red'],
+                              ['set 2', 'rest', 50, 'blue'],
+                              ['set 2', 'dead hang', 15, 'red'],
+                              ['set 2', 'rest', 50, 'blue'],
+                              ['set 2', 'dead hang', 15, 'red'],
+                              ['set 2', 'rest', 300, 'blue'],
+                              ['set 3', 'dead hang', 15, 'red'],
+                              ['set 3', 'rest', 50, 'blue'],
+                              ['set 3', 'dead hang', 15, 'red'],
+                              ['set 3', 'rest', 50, 'blue'],
+                              ['set 3', 'dead hang', 15, 'red'],
+                              ['set 3', 'rest', 50, 'blue'],
+                              ['set 3', 'dead hang', 15, 'red'],
+                              ['set 3', 'rest', 300, 'blue'],
+                              ['set 4', 'dead hang', 15, 'red'],
+                              ['set 4', 'rest', 50, 'blue'],
+                              ['set 4', 'dead hang', 15, 'red'],
+                              ['set 4', 'rest', 50, 'blue'],
+                              ['set 4', 'dead hang', 15, 'red'],
+                              ['set 4', 'rest', 50, 'blue'],
+                              ['set 4', 'dead hang', 15, 'red'],
+                              ['set 4', 'done', 300, 'blue']]
+                }
+
+                // UI Indicators
+                var phase_indicator = $('#phase');
+                var action_indicator = $('#action_indicator');
+                var count_indicator = $('#countdown');
+
+                // Create the Progress Bar
+                var localbar = new ProgressBar.Circle(localprogress, {
+                    strokeWidth: 10,
+                    easing: 'easeInOut',
+                    duration: 1400,
+                    color: 'black',
+                    trailColor: '#eee',
+                    trailWidth: 1,
+                    svgStyle: null
+                });
+
+                var globalbar = new ProgressBar.Circle(globalprogress, {
+                    strokeWidth: 10,
+                    easing: 'easeInOut',
+                    duration: 1400,
+                    color: '#FFEA82',
+                    trailColor: '#eee',
+                    trailWidth: 1,
+                    svgStyle: null
+                });
+
+
+                async function runRoutine(r) {
+                    // Figure out the total number of seconds in the routine.
+                    var global_length = 0;
+                    for (var i = 0; i < routine.data.length; i++) {
+                        global_length += routine.data[i][2]
+                    }
+
+                    var seconds_elapsed = 0;
+                    var global_progress = 0;
+
+                    // Iterate through the routine.
+                    for (var i = 0; i < routine.data.length; i++) {
+                        let current_phase = routine.data[i][0]
+                        let current_action = routine.data[i][1];
+                        let current_count = routine.data[i][2];
+                        let current_color = routine.data[i][3];
+
+                        let cc = routine.data[i][2];
+
+                        var interval = 10; // update every n milliseconds
+
+                        var countdown = setInterval(function() {
+                            $('body').css('background-color', current_color);
+
+                            var local_completion = 1-(current_count/cc);
+                            localbar.set(local_completion);
+
+                            var global_completion = seconds_elapsed/global_length;
+                            globalbar.set(global_completion);
+
+                            phase_indicator.text(current_phase);
+                            action_indicator.text(current_action);
+                            count_indicator.text(''+current_count.toFixed(0)+' seconds')
+
+                            current_count = current_count - (interval/1000)
+                            seconds_elapsed += (interval/1000)
+
+                            if (current_count <= 0) {
+                                clearInterval(countdown);
+                            } 
+
+                        }, interval);
+
+                        await sleep(cc*1000);
+                        clearInterval(countdown);
+
+                    }
+
+                }
+
+
+//            });
+
+        </script>
+    </body>
+</html>

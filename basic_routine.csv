@@ -1,0 +1,37 @@
+﻿get ready,get ready,10,blue
+warm up,jug hang,20,orange
+warm up,rest,10,blue
+warm up,jug hang,20,orange
+warm up,rest,60,blue
+set 1,dead hang,15,red
+set 1,rest,50,blue
+set 1,dead hang,15,red
+set 1,rest,50,blue
+set 1,dead hang,15,red
+set 1,rest,50,blue
+set 1,dead hang,15,red
+set 1,rest,300,blue
+set 2,dead hang,15,red
+set 2,rest,50,blue
+set 2,dead hang,15,red
+set 2,rest,50,blue
+set 2,dead hang,15,red
+set 2,rest,50,blue
+set 2,dead hang,15,red
+set 2,rest,300,blue
+set 3,dead hang,15,red
+set 3,rest,50,blue
+set 3,dead hang,15,red
+set 3,rest,50,blue
+set 3,dead hang,15,red
+set 3,rest,50,blue
+set 3,dead hang,15,red
+set 3,rest,300,blue
+set 4,dead hang,15,red
+set 4,rest,50,blue
+set 4,dead hang,15,red
+set 4,rest,50,blue
+set 4,dead hang,15,red
+set 4,rest,50,blue
+set 4,dead hang,15,red
+set 4,done,300,blue
