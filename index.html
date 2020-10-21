@@ -72,7 +72,7 @@
                         <div class="btn-group">
                             <select class="selectpicker" id='select-routine'>
                                 <option>Basic Training</option>
-                                <option>Advanced Routine</option>
+                                <option>Grace's Routine</option>
                             </select>
                             <button class="btn btn-primary" id='start-button' type="button">
                                 Start!
@@ -82,16 +82,16 @@
 
                     </div>
                     <div id='action'>
-                        <h1 class="cover-heading">Basic Training</h1>
+                        <h1 class="cover-heading" id="routine_label">Basic Training</h1>
                         <br>
                         <h1 id="phase">ABC</h1> <br>
                         <h1 id="action_indicator">ABC</h1> <br>
                         <h1 id="countdown">123</h1>
                         <div id="" class='row justify-content-center'>
-                        <div id="secondshand"></div>
-                        <div id="localprogress"></div>
-                        <div id="globalprogress"></div>
-                            </div>
+                            <div id="secondshand"></div>
+                            <div id="localprogress"></div>
+                            <div id="globalprogress"></div>
+                        </div>
 
                     </div>
 
@@ -117,7 +117,9 @@
             $('#start-button').on('click', function(event) {
                 $('#intro').hide();
                 $('#action').show();
-                runRoutine('asdf');
+                
+                var index = $('.selectpicker').prop('selectedIndex');
+                runRoutine(index);
             });
             $('#action').hide();
 
@@ -125,7 +127,7 @@
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
 
-            var routine = {
+            var routine_0 = {
                 'name' : 'Basic Training',
                 'data' : [['get ready', 'get ready', 10, 'blue'],
                           ['warm up', 'jug hang', 20, 'orange'],
@@ -166,7 +168,43 @@
                           ['set 4', 'done', 300, 'blue']]
             }
 
+            var routine_1 = {
+                'name' : 'Grace\'s Training',
+                'data' : [['get ready', 'get ready', 10.0, 'blue'],
+                 ['warm up', 'hang', 15.0, 'orange'],
+                 ['warm up', 'rest', 10.0, 'red'],
+                 ['warm up', 'hang', 15.0, 'orange'],
+                 ['warm up', 'rest', 10.0, 'red'],
+                 ['set 1', 'hang', 15.0, 'orange'],
+                 ['set 1', 'rest', 10.0, 'red'],
+                 ['set 1', 'hang', 15.0, 'orange'],
+                 ['set 1', 'rest', 10.0, 'red'],
+                 ['set 1', 'hang', 15.0, 'orange'],
+                 ['set 1', 'rest', 10.0, 'red'],
+                 ['set 1', 'hang', 15.0, 'orange'],
+                 ['set 1', 'long rest', 300.0, 'red'],
+                 ['set 2', 'hang', 15.0, 'orange'],
+                 ['set 2', 'rest', 10.0, 'red'],
+                 ['set 2', 'hang', 15.0, 'orange'],
+                 ['set 2', 'rest', 10.0, 'red'],
+                 ['set 2', 'hang', 15.0, 'orange'],
+                 ['set 2', 'rest', 10.0, 'red'],
+                 ['set 2', 'elevated hang', 15.0, 'orange'],
+                 ['set 2', 'long rest', 300.0, 'red'],
+                 ['set 3', 'hang', 15.0, 'orange'],
+                 ['set 3', 'rest', 10.0, 'red'],
+                 ['set 3', 'hang', 15.0, 'orange'],
+                 ['set 3', 'rest', 10.0, 'red'],
+                 ['set 3', 'hang', 15.0, 'orange'],
+                 ['set 3', 'rest', 10.0, 'red'],
+                 ['set 3', 'hang', 15.0, 'orange'],
+                 ['set 3', 'long rest', 300.0, 'red']]
+            }
+            
+            var routines = [routine_0, routine_1];
+
             // UI Indicators
+            var routine_indicator = $('#routine_label');
             var phase_indicator = $('#phase');
             var action_indicator = $('#action_indicator');
             var count_indicator = $('#countdown');
@@ -208,7 +246,10 @@
             });
 
 
-            async function runRoutine(r) {
+            async function runRoutine(i) {
+
+                var routine = routines[i];
+                console.log(routines);
                 // Figure out the total number of seconds in the routine.
                 var global_length = 0;
                 for (var i = 0; i < routine.data.length; i++) {
@@ -238,6 +279,7 @@
                         var global_completion = seconds_elapsed/global_length;
                         globalbar.set(global_completion);
 
+                        routine_indicator.text(routine.name);
                         phase_indicator.text('Phase: ' + current_phase);
                         action_indicator.text('Action: ' + current_action);
                         count_indicator.text(''+current_count.toFixed(0)+' seconds')
